@@ -7,9 +7,9 @@ import { makeStyles } from '@material-ui/styles';
 import { Drawer, Divider, Paper, Avatar, Typography } from '@material-ui/core';
 import { Hidden } from '@material-ui/core';
 
-import useRouter from 'utils/useRouter';
 import { Navigation } from 'components';
 import navigationConfig from './navigationConfig';
+import useRouter from "../../../../utils/useRouter";
 
 const useStyles = makeStyles(theme => ({
   root: {

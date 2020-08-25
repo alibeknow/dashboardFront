@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -7,16 +7,20 @@ import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Button, TextField } from '@material-ui/core';
 
-import useRouter from 'utils/useRouter';
-import { login } from 'actions';
+import { login } from "../../../../actions/sessionActions";
+import useRouter from "../../../../utils/useRouter";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const apiURL = 'http://10.20.35.85:3000/providers/';
 
 const schema = {
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true
+  username: {
+    presence: { allowEmpty: false, message: 'не указано' },
+    // username: true
   },
   password: {
-    presence: { allowEmpty: false, message: 'is required' }
+    presence: { allowEmpty: false, message: 'Необходимо заполнить поле' }
   }
 };
 
@@ -52,12 +56,12 @@ const LoginForm = props => {
   });
 
   useEffect(() => {
-    const errors = validate(formState.values, schema);
+    const result = validate(formState.values, schema);
 
     setFormState(formState => ({
       ...formState,
-      isValid: errors ? false : true,
-      errors: errors || {}
+      isValid: result ? false : true,
+      errors: result || {}
     }));
   }, [formState.values]);
 
@@ -82,12 +86,28 @@ const LoginForm = props => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    // dispatch(login());
-    router.history.push('/');
+    dispatch(login());
+    axios.get(apiURL, {
+      auth: {
+        username: formState.values.username,
+        password: formState.values.password
+      }}).then(function(response) {
+        router.history.push('/');
+      }).catch(function(error) {
+        toast.error("Неверное имя пользователя и/или пароль",{
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+    });
+    // getProviders(formState.values.username, formState.values.password);
   };
 
-  const hasError = field =>
-    formState.touched[field] && formState.errors[field] ? true : false;
+  const hasError = field => formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
     <form
@@ -95,15 +115,18 @@ const LoginForm = props => {
       className={clsx(classes.root, className)}
       onSubmit={handleSubmit}
     >
+      <div>
+        <ToastContainer />
+      </div>
       <div className={classes.fields}>
         <TextField
-          error={hasError('email')}
+          error={hasError('username')}
           fullWidth
-          helperText={hasError('email') ? formState.errors.email[0] : null}
-          label="Email address"
-          name="email"
+          helperText={hasError('username') ? formState.errors.username[0] : null}
+          label="Учетная запись"
+          name="username"
           onChange={handleChange}
-          value={formState.values.email || ''}
+          value={formState.values.username || ''}
           variant="outlined"
         />
         <TextField
@@ -112,7 +135,7 @@ const LoginForm = props => {
           helperText={
             hasError('password') ? formState.errors.password[0] : null
           }
-          label="Password"
+          label="Пароль"
           name="password"
           onChange={handleChange}
           type="password"
@@ -128,7 +151,7 @@ const LoginForm = props => {
         type="submit"
         variant="contained"
       >
-        Sign in
+        Вход
       </Button>
     </form>
   );
