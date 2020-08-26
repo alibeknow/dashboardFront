@@ -8,6 +8,7 @@ import ErrorLayout from './layouts/Error';
 import DashboardLayout from './layouts/Dashboard';
 import DashboardAnalyticsView from './views/DashboardAnalytics';
 import DashboardDefaultView from './views/DashboardDefault';
+import DashboardHistory from './views/DashboardHistory';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
 
@@ -15,7 +16,7 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/presentation" />
+    component: () => <Redirect to="/dashboards/history" />
   },
   {
     path: '/auth',
@@ -95,6 +96,11 @@ const routes = [
         component: DashboardDefaultView
       },
       {
+        path: '/dashboards/history',
+        exact: true,
+        component: DashboardHistory
+      },
+      {
         path: '/invoices/:id',
         exact: true,
         component: lazy(() => import('views/InvoiceDetails'))
@@ -109,7 +115,7 @@ const routes = [
         exact: true,
         component: lazy(() => import('views/Mail'))
       },
-      {
+      /*{
         path: '/management/customers',
         exact: true,
         component: lazy(() => import('views/CustomerManagementList'))
@@ -123,7 +129,7 @@ const routes = [
         path: '/management/customers/:id/:tab',
         exact: true,
         component: lazy(() => import('views/CustomerManagementDetails'))
-      },
+      },*/
       {
         path: '/management/projects',
         exact: true,

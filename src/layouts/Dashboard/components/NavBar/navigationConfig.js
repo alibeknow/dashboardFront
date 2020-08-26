@@ -26,27 +26,31 @@ export default [
   {
     title: 'Pages',
     pages: [
-      {
+      /* {
         title: 'Overview',
         href: '/overview',
         icon: HomeIcon
-      },
+      },*/
       {
         title: 'Dashboards',
         href: '/dashboards',
         icon: DashboardIcon,
         children: [
-          {
+          /*{
             title: 'Default',
             href: '/dashboards/default'
           },
           {
             title: 'Analytics',
             href: '/dashboards/analytics'
+          },*/
+          {
+            title: 'History',
+            href: '/dashboards/history'
           }
         ]
       },
-      {
+      /* {
         title: 'Management',
         href: '/management',
         icon: BarChartIcon,
@@ -251,7 +255,7 @@ export default [
         href: '/changelog',
         icon: ViewModuleIcon,
         label: () => <Label color={colors.blue['500']}>v1.2.0</Label>
-      }
+      }*/
     ]
   }
 ];

@@ -1,7 +1,13 @@
 import * as actionTypes from 'actions';
 
+// const { password, username } = this.props;
+
 const initialState = {
   loggedIn: true,
+  auth: {
+    // username: username,
+    // password: password
+  },
   user: {
     username: '',
     password: '',

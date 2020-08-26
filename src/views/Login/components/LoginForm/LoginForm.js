@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -9,15 +8,14 @@ import { Button, TextField } from '@material-ui/core';
 
 import { login } from "../../../../actions/sessionActions";
 import useRouter from "../../../../utils/useRouter";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const apiURL = 'http://10.20.35.85:3000/providers/';
+import { getAuth } from "../../../../utils/axios";
+import { ToastContainer, toast } from "react-toastify";
+import sessionReducer from "../../../../reducers/sessionReducer";
 
 const schema = {
   username: {
     presence: { allowEmpty: false, message: 'не указано' },
-    // username: true
   },
   password: {
     presence: { allowEmpty: false, message: 'Необходимо заполнить поле' }
@@ -47,6 +45,7 @@ const LoginForm = props => {
   const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
+  const reducer = sessionReducer;
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -87,24 +86,19 @@ const LoginForm = props => {
   const handleSubmit = async event => {
     event.preventDefault();
     dispatch(login());
-    axios.get(apiURL, {
-      auth: {
-        username: formState.values.username,
-        password: formState.values.password
-      }}).then(function(response) {
-        router.history.push('/');
-      }).catch(function(error) {
-        toast.error("Неверное имя пользователя и/или пароль",{
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+    getAuth(formState.values.username, formState.values.password, 'providers').then(function(response) {
+      router.history.push('/dashboards/default');
+    }).catch(function(error) {
+      toast.error("Неверное имя пользователя и/или пароль",{
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
     });
-    // getProviders(formState.values.username, formState.values.password);
   };
 
   const hasError = field => formState.touched[field] && formState.errors[field] ? true : false;

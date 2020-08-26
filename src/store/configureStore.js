@@ -1,9 +1,9 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from '../reducers';
 // import { createLogger } from 'redux-logger';
 
-import rootReducer from 'reducers';
 
 // const loggerMiddleware = createLogger();
 
