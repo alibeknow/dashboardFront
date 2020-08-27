@@ -50,7 +50,7 @@ const Header = props => {
       >
         Good Morning, {data.name}
       </Typography>
-      <Typography variant="subtitle1">Here's what's happening</Typography>
+      <Typography variant="subtitle1"></Typography>
     </div>
   );
 };

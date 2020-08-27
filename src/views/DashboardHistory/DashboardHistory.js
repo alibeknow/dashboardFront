@@ -4,18 +4,17 @@ import { makeStyles } from '@material-ui/styles';
 
 import { Page } from 'components';
 import {
-  Header,
-  // LatestProjects,
-  // NewProjects,
-  // RealTime,
-  // RoiPerCustomer,
-  // TeamTasks,
-  // TodaysMoney,
-  // SystemHealth,
-  // PerformanceOverTime
+  Header
 } from './components';
 
-// import {apiURL} from "../../utils/axios";
+import Paper from '@material-ui/core/Paper';
+import {
+  Grid,
+  DragDropProvider,
+  Table,
+  TableHeaderRow,
+  TableColumnReordering,
+} from '@devexpress/dx-react-grid-material-ui';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,80 +25,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// axios.get(apiURL + 'history/', {});
-
-/*
- <Grid
- className={classes.container}
- container
- spacing={3}
- >
- <Grid
- item
- lg={3}
- sm={6}
- xs={12}
- >
- <TodaysMoney />
- </Grid>
- <Grid
- item
- lg={3}
- sm={6}
- xs={12}
- >
- <NewProjects />
- </Grid>
- <Grid
- item
- lg={3}
- sm={6}
- xs={12}
- >
- <SystemHealth />
- </Grid>
- <Grid
- item
- lg={3}
- sm={6}
- xs={12}
- >
- <RoiPerCustomer />
- </Grid>
- <Grid
- item
- lg={3}
- xs={12}
- >
- <RealTime />
- </Grid>
- <Grid
- item
- lg={9}
- xs={12}
- >
- <PerformanceOverTime />
- </Grid>
- <Grid
- item
- lg={5}
- xl={4}
- xs={12}
- >
- <TeamTasks />
- </Grid>
- <Grid
- item
- lg={7}
- xl={8}
- xs={12}
- >
- <LatestProjects />
- </Grid>
- </Grid>*/
-
 const DashboardHistory = () => {
   const classes = useStyles();
+  const columns = [
+    { name: 'name', title: 'Name' },
+    { name: 'gender', title: 'Gender' },
+    { name: 'city', title: 'City' },
+    { name: 'car', title: 'Car' },
+  ];
+  const rows = [
+    { name: 'name', title: 'Name' },
+    { name: 'gender', title: 'Gender' },
+    { name: 'city', title: 'City' },
+    { name: 'car', title: 'Car' },
+  ];
+  const tableColumnExtensions = [
+    { columnName: 'gender', width: 100 },
+  ];
 
   return (
     <Page
@@ -107,6 +49,21 @@ const DashboardHistory = () => {
       title="Default Dashboard"
     >
       <Header />
+      <Paper>
+        <Grid
+          rows={rows}
+          columns={columns}
+        >
+          <DragDropProvider />
+          <Table
+            columnExtensions={tableColumnExtensions}
+          />
+          <TableColumnReordering
+            defaultOrder={['city', 'gender', 'car', 'name']}
+          />
+          <TableHeaderRow />
+        </Grid>
+      </Paper>
     </Page>
   );
 };

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -28,14 +29,21 @@ import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 
-import axios from 'utils/axios';
-import useRouter from 'utils/useRouter';
-import { PricingModal, NotificationsPopover } from 'components';
-import { logout } from 'actions';
+import { logout } from "../../../../actions";
+import useRouter from "../../../../utils/useRouter";
+import NotificationsPopover from "../../../../components/NotificationsPopover/NotificationsPopover";
+import PricingModal from "../../../../components/PricingModal/PricingModal";
 
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: 'none'
+  },
+  logo: {
+    marginLeft: -12,
+    height: 42,
+    width: 225,
+    display: 'flex',
+    flexGrow: 2
   },
   flexGrow: {
     flexGrow: 1
@@ -106,7 +114,7 @@ const TopBar = props => {
   const [notifications, setNotifications] = useState([]);
   const [openNotifications, setOpenNotifications] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     let mounted = true;
 
     const fetchNotifications = () => {
@@ -122,11 +130,11 @@ const TopBar = props => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, []); */
 
   const handleLogout = () => {
     history.push('/auth/login');
-    // dispatch(logout());
+    dispatch(logout());
   };
 
   const handlePricingOpen = () => {
@@ -173,30 +181,18 @@ const TopBar = props => {
     <AppBar
       {...rest}
       className={clsx(classes.root, className)}
-      color="primary"
+      color="default"
     >
       <Toolbar>
         <RouterLink to="/">
           <img
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            src="/images/logos/bcc_info_logo.png"
+            className={classes.logo}
           />
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden smDown>
-          <div
-            className={classes.search}
-            ref={searchRef}
-          >
-            <SearchIcon className={classes.searchIcon} />
-            <Input
-              className={classes.searchInput}
-              disableUnderline
-              onChange={handleSearchChange}
-              placeholder="Search people &amp; places"
-              value={searchValue}
-            />
-          </div>
           <Popper
             anchorEl={searchRef.current}
             className={classes.searchPopper}
@@ -225,14 +221,6 @@ const TopBar = props => {
               </Paper>
             </ClickAwayListener>
           </Popper>
-          <Button
-            className={classes.trialButton}
-            onClick={handlePricingOpen}
-            variant="contained"
-          >
-            <LockIcon className={classes.trialIcon} />
-            Trial expired
-          </Button>
         </Hidden>
         <Hidden mdDown>
           <IconButton

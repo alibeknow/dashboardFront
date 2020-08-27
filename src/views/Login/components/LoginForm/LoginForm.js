@@ -88,6 +88,7 @@ const LoginForm = props => {
     dispatch(login());
     getAuth(formState.values.username, formState.values.password, 'providers').then(function(response) {
       router.history.push('/dashboards/default');
+      reducer({ auth: { username: formState.values.username, password: formState.values.password } })
     }).catch(function(error) {
       toast.error("Неверное имя пользователя и/или пароль",{
         position: "top-center",

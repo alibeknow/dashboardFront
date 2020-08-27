@@ -1,12 +1,10 @@
 import * as actionTypes from 'actions';
 
-// const { password, username } = this.props;
-
 const initialState = {
   loggedIn: true,
   auth: {
-    // username: username,
-    // password: password
+    username: null,
+    password: null
   },
   user: {
     username: '',
@@ -18,6 +16,7 @@ const initialState = {
 };
 
 const sessionReducer = (state = initialState, action) => {
+  console.log(state);
 
   switch (action.type) {
     case actionTypes.SESSION_LOGIN: {
