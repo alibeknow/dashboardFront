@@ -11,7 +11,6 @@ import useRouter from "../../../../utils/useRouter";
 import 'react-toastify/dist/ReactToastify.css';
 import { getAuth } from "../../../../utils/axios";
 import { ToastContainer, toast } from "react-toastify";
-import sessionReducer from "../../../../reducers/sessionReducer";
 
 const schema = {
   username: {
@@ -45,7 +44,6 @@ const LoginForm = props => {
   const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
-  const reducer = sessionReducer;
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -85,20 +83,11 @@ const LoginForm = props => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    dispatch(login());
-    getAuth(formState.values.username, formState.values.password, 'providers').then(function(response) {
-      router.history.push('/dashboards/default');
-      reducer({ auth: { username: formState.values.username, password: formState.values.password } })
+    dispatch(login( formState.values.username, formState.values.password ));
+    getAuth( formState.values.username, formState.values.password, 'providers' ).then(function(response) {
+      router.history.push('/dashboards/history');
     }).catch(function(error) {
-      toast.error("Неверное имя пользователя и/или пароль",{
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error("Неверное имя пользователя и/или пароль",{ position: "top-center", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined });
     });
   };
 
