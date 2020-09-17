@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
+import { colors } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -10,35 +11,35 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 0,
     flexShrink: 0
   },
-  sm: {
+  small: {
     height: theme.spacing(1),
     width: theme.spacing(1)
   },
-  md: {
+  medium: {
     height: theme.spacing(2),
     width: theme.spacing(2)
   },
-  lg: {
+  large: {
     height: theme.spacing(3),
     width: theme.spacing(3)
   },
-  neutral: {
-    backgroundColor: theme.palette.neutral
+  default: {
+    backgroundColor: colors.grey[50]
   },
   primary: {
     backgroundColor: theme.palette.primary.main
   },
   info: {
-    backgroundColor: theme.palette.info.main
+    backgroundColor: colors.lightBlue[600]
   },
   warning: {
-    backgroundColor: theme.palette.warning.main
+    backgroundColor: colors.orange[900]
   },
-  danger: {
+  error: {
     backgroundColor: theme.palette.error.main
   },
   success: {
-    backgroundColor: theme.palette.success.main
+    backgroundColor: colors.green[600]
   }
 }));
 
@@ -47,17 +48,20 @@ const StatusBullet = props => {
 
   const classes = useStyles();
 
+  const rootClassName = clsx(
+    {
+      [classes.root]: true,
+      [classes[size]]: size,
+      [classes[color]]: color
+    },
+    className
+  );
+
   return (
     <span
       {...rest}
-      className={clsx(
-        {
-          [classes.root]: true,
-          [classes[size]]: size,
-          [classes[color]]: color
-        },
-        className
-      )}
+      className={rootClassName}
+      //
     />
   );
 };
@@ -65,18 +69,18 @@ const StatusBullet = props => {
 StatusBullet.propTypes = {
   className: PropTypes.string,
   color: PropTypes.oneOf([
-    'neutral',
+    'default',
     'primary',
     'info',
     'success',
     'warning',
-    'danger'
+    'error'
   ]),
-  size: PropTypes.oneOf(['sm', 'md', 'lg'])
+  size: PropTypes.oneOf(['small', 'medium', 'large'])
 };
 
 StatusBullet.defaultProps = {
-  size: 'md',
+  size: 'medium',
   color: 'default'
 };
 

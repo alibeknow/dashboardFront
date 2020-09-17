@@ -1,36 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { Chart } from 'react-chartjs-2';
+import MomentUtils from '@date-io/moment';
+import { Provider as StoreProvider } from 'react-redux';
 import { ThemeProvider } from '@material-ui/styles';
-import validate from 'validate.js';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { renderRoutes } from 'react-router-config';
 
-import { chartjs } from './helpers';
 import theme from './theme';
-import 'react-perfect-scrollbar/dist/css/styles.css';
+import { configureStore } from './store';
+import routes from './Routes';
+import {
+  ScrollReset,
+  GoogleAnalytics,
+  CookiesNotification
+} from './components';
+import './mixins/chartjs';
+import './mixins/moment';
+import './mixins/validate';
+import './mixins/prismjs';
+import './mock';
 import './assets/scss/index.scss';
-import validators from './common/validators';
-import Routes from './Routes';
 
-const browserHistory = createBrowserHistory();
+const history = createBrowserHistory();
+const store = configureStore();
 
-Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
-  draw: chartjs.draw
-});
-
-validate.validators = {
-  ...validate.validators,
-  ...validators
+const App = () => {
+  return (
+    <StoreProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <Router history={history}>
+            <ScrollReset />
+            <GoogleAnalytics />
+            <CookiesNotification />
+            {renderRoutes(routes)}
+          </Router>
+        </MuiPickersUtilsProvider>
+      </ThemeProvider>
+    </StoreProvider>
+  );
 };
 
-export default class App extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <Router history={browserHistory}>
-          <Routes />
-        </Router>
-      </ThemeProvider>
-    );
-  }
-}
+export default App;
