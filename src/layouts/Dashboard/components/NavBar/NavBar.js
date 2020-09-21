@@ -9,7 +9,7 @@ import { Hidden } from '@material-ui/core';
 
 import { Navigation } from 'components';
 import navigationConfig from './navigationConfig';
-import useRouter from "../../../../utils/useRouter";
+import useRouter from '../../../../utils/useRouter';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,14 +45,12 @@ const NavBar = props => {
 
   const classes = useStyles();
   const router = useRouter();
-  const session = useSelector(state => state.session);
+  const session = useSelector(state => state.auth);
 
   useEffect(() => {
     if (openMobile) {
       onMobileClose && onMobileClose();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.location.pathname]);
 
   const navbarContent = (

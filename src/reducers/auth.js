@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
-export const initialState = {
+const initialState = {
   loggedIn: false,
   avatar: null,
   bio: 'Unauthorized',

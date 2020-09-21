@@ -4,7 +4,7 @@ export function fetchHistory(){
   return async dispatch=>{
     dispatch(fetchHistoryStart)  
     try {
-      const response=await axios.get('http://localhost:4000/monster');
+      const response=await axios.get('http://localhost:3444/monster');
       dispatch(fetchHistorySuccess(response.data))      
     } catch (error) {
       dispatch(fetchHistoryError(error))
