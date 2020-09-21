@@ -1,7 +1,16 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+
 import {connect} from 'react-redux'
-import {fetchHistory} from '../../actions/history'
+import {fetchHistory,changePageSize} from '../../actions/history'
+import {
+  PagingState,
+  SortingState,
+  FilteringState,
+  IntegratedFiltering,
+  SearchState,
+  CustomPaging,
+
+} from '@devexpress/dx-react-grid';
 
 import { Page } from 'components';
 import {
@@ -15,17 +24,18 @@ import {
   Table,
   TableHeaderRow,
   TableColumnReordering,
-  VirtualTable,
   TableFilterRow,
+  PagingPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 
 class HistoryTable extends React.Component
 {
-
+  
   componentDidMount(){
     this.props.fetchHistory()
+    
   }
   render()
   {
@@ -38,23 +48,51 @@ class HistoryTable extends React.Component
         <Paper>
           <Grid
             columns={[
-              { name: 'name', title: 'Name' },
-              { name: 'gender', title: 'Gender' },
-              { name: 'city', title: 'City' },
-              { name: 'car', title: 'Car' },
+              { name: 'address', title: 'Номер абонента' },
+              { name: 'routeType', title: 'Тип маршрута' },
+              { name: 'message', title: 'Сообщение' },
+              { name: 'status', title: 'Статус' },
+              { name: 'channel', title: 'Канал' },
+              { name: 'created', title: 'Дата создания' },
+              { name: 'sended', title: 'Дата отправки' },
+              { name: 'delivered', title: 'Дата доставки' }
             ]}
             rows={this.props.rows}
           >
-            <DragDropProvider />
-            <Table />
-            <TableColumnReordering
-              defaultOrder={['city', 'gender', 'car', 'name']}
+            <FilteringState
+              filters={this.props.filters}
+              onFiltersChange={this.props.fetchHistory}
             />
-    
-            <VirtualTable />
-            <TableHeaderRow />
-            <TableFilterRow />
+            <SortingState
+              defaultSorting={[
+                { columnName: 'address', direction: 'asc' },
+                { columnName: 'message', direction: 'asc' },
+              ]}
+            />
+
+            <SearchState />
+            <IntegratedFiltering />
+            <PagingState
+              currentPage={this.props.currentPage}
+              onCurrentPageChange={this.props.currentPage}
+              onPageSizeChange={this.props.changePageSize}
+              pageSize={this.props.pageSize}
+            />
+            <CustomPaging
+              totalCount={this.props.totalCount}
+            />
+            <Table />
+            <TableHeaderRow showSortingControls />
+            <TableFilterRow showFilterSelector />
+            <TableColumnReordering
+              defaultOrder={['address', 'routeType', 'message', 'status']}
+            />
+
+            <PagingPanel
+              pageSizes={this.props.pageSizes}
+            />
           </Grid>
+          
         </Paper>
       </Page>
     );
@@ -64,15 +102,24 @@ class HistoryTable extends React.Component
 }
 
 function mapStateToProps(state) {
+
   return {
     rows: state.history.rows,
+    filters:state.history.filters,
+    totalCount:state.history.totalCount, 
+    pageSize:state.history.pageSize,
+    pageSizes: state.history.pageSizes,
+    currentPage:state.history.currentPage,
+    lastQuery:state.history.lastQuery,
     loading: state.history.loading
+    
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch,ownProps) {
   return {
-    fetchHistory: () => dispatch(fetchHistory())
+    fetchHistory: () => dispatch(fetchHistory(ownProps)),
+    changePageSize: () => dispatch(changePageSize({pageSize:this.props.pageSize,currentPage:this.props.currentPage}))
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(HistoryTable);
