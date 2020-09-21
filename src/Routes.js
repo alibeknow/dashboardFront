@@ -132,6 +132,11 @@ const routes = [
         component: lazy(() => import('views/CustomerManagementDetails'))
       },*/
       {
+        path: '/signin',
+        exact: true,
+        component: lazy(() => import('views/SignIn'))
+      },
+      {
         path: '/management/projects',
         exact: true,
         component: lazy(() => import('views/ProjectManagementList'))

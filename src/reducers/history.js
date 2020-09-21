@@ -8,7 +8,8 @@ const initialState={
     { name: 'gender', title: 'Gender' },
     { name: 'city', title: 'City' },
     { name: 'car', title: 'Car' },
-  ]
+  ],
+  filter:null
 }
 
 

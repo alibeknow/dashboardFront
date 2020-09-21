@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 
-import sessionReducer from './session';
+import authReducer from './auth';
 import historyReducer from './history';
 
 const rootReducer = combineReducers({
-  session: sessionReducer,
+  auth: authReducer,
   history:historyReducer
 });
 

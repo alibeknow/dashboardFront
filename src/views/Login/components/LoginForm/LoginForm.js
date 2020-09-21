@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter} from 'react-router-dom';
 import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -6,10 +7,9 @@ import { useDispatch,connect } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Button, TextField } from '@material-ui/core';
 
-import { auth } from '../../../../actions/auth';
+import { signIn } from '../../../../actions/auth';
 import useRouter from '../../../../utils/useRouter';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth } from '../../../../utils/axios';
 import { ToastContainer, toast } from 'react-toastify';
 
 const schema = {
@@ -83,12 +83,15 @@ const LoginForm = props => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    dispatch(auth( formState.values.username, formState.values.password ));
-    getAuth( formState.values.username, formState.values.password, 'providers' ).then(function(response) {
+    try {
+      await props.signIn( formState.values.username, formState.values.password)  
       router.history.push('/dashboards/history');
-    }).catch(function(error) {
+    } catch (error) {
       toast.error('Неверное имя пользователя и/или пароль',{ position: 'top-center', autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined });
-    });
+    }
+    
+    //router.history.push('/dashboards/history');
+    
   };
 
   const hasError = field => formState.touched[field] && formState.errors[field] ? true : false;
@@ -146,7 +149,7 @@ LoginForm.propTypes = {
 };
 function mapDispatchToProps(dispatch){
   return {
-    auth:(username,password,isLogin)=>dispatch(auth(username,password,isLogin))
+    signIn:(username,password)=>dispatch(signIn(username,password))
   }
 }
-export default connect(null,mapDispatchToProps)(LoginForm);
+export default withRouter(connect(null,mapDispatchToProps)(LoginForm));

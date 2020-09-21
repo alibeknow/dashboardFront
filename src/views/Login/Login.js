@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink,withRouter} from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -13,7 +13,7 @@ import {
 import LockIcon from '@material-ui/icons/Lock';
 import '@lottiefiles/lottie-player';
 import { create } from '@lottiefiles/lottie-interactivity';
-
+import {connect} from 'react-redux'
 import { Page } from 'components';
 import gradients from 'utils/gradients';
 import { LoginForm } from './components';
@@ -86,21 +86,7 @@ class Login extends React.Component {
     // this.myRef = React.createRef();
   }
 
-  /* componentDidMount() {
-     this.myRef.current.addEventListener('load', function (e) {
-      create({
-        mode: 'scroll',
-        player: '#team',
-        actions: [
-          {
-            visibility: [0, 1],
-            type: 'seek',
-            frames: [0, 100],
-          },
-        ],
-      });
-    });
-  }*/
+ 
 
   render() {
     const classes = useStyles;
@@ -122,12 +108,11 @@ class Login extends React.Component {
             <LoginForm className={classes.loginForm} />
             <Divider className={classes.divider} />
           </CardContent>
-          <div>
-          </div>
+          <div />
         </Card>
       </Page>
     );
   }
 }
 
-export default Login;
+export default withRouter(Login);

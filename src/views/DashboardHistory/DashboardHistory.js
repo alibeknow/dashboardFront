@@ -15,6 +15,8 @@ import {
   Table,
   TableHeaderRow,
   TableColumnReordering,
+  VirtualTable,
+  TableFilterRow,
 } from '@devexpress/dx-react-grid-material-ui';
 
 
@@ -27,7 +29,6 @@ class HistoryTable extends React.Component
   }
   render()
   {
-    console.log(this.props)
     return (
       <Page
         
@@ -49,7 +50,10 @@ class HistoryTable extends React.Component
             <TableColumnReordering
               defaultOrder={['city', 'gender', 'car', 'name']}
             />
+    
+            <VirtualTable />
             <TableHeaderRow />
+            <TableFilterRow />
           </Grid>
         </Paper>
       </Page>
