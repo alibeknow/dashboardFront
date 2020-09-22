@@ -6,8 +6,7 @@ import {
   PagingState,
   SortingState,
   FilteringState,
-  IntegratedFiltering,
-  SearchState,
+
   CustomPaging,
 
 } from '@devexpress/dx-react-grid';
@@ -20,11 +19,11 @@ import {
 import Paper from '@material-ui/core/Paper';
 import {
   Grid,
-  DragDropProvider,
   Table,
-  TableHeaderRow,
-  TableColumnReordering,
+  VirtualTable,
   TableFilterRow,
+  TableHeaderRow,
+
   PagingPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -60,8 +59,8 @@ class HistoryTable extends React.Component
             rows={this.props.rows}
           >
             <FilteringState
-              filters={this.props.filters}
-              onFiltersChange={this.props.fetchHistory}
+              
+              onFiltersChange={this.state.history.filters}
             />
             <SortingState
               defaultSorting={[
@@ -70,8 +69,8 @@ class HistoryTable extends React.Component
               ]}
             />
 
-            <SearchState />
-            <IntegratedFiltering />
+        
+        
             <PagingState
               currentPage={this.props.currentPage}
               onCurrentPageChange={this.props.currentPage}
@@ -81,13 +80,9 @@ class HistoryTable extends React.Component
             <CustomPaging
               totalCount={this.props.totalCount}
             />
-            <Table />
+            <VirtualTable />
             <TableHeaderRow showSortingControls />
-            <TableFilterRow showFilterSelector />
-            <TableColumnReordering
-              defaultOrder={['address', 'routeType', 'message', 'status']}
-            />
-
+            <TableFilterRow />
             <PagingPanel
               pageSizes={this.props.pageSizes}
             />
