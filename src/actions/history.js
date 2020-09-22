@@ -1,15 +1,22 @@
 import axios from 'axios'
 import { FETCH_HISTORY_ERROR, FETCH_HISTORY_START, FETCH_HISTORY_SUCCESS } from './actionTypes';
 export function fetchHistory(filters){
-  console.log('fiters',filters)
+  if (filters)
+  {
+    const filter=filters.reduce((acc, { columnName, value }) => {
+      acc.push({[columnName]: value });
+      return acc;
+    }, [])
+  }
   return async dispatch=>{
     dispatch(fetchHistoryStart)  
     try {
-      const response=await axios.get('http://10.20.35.85:3000/history',
+      const response=await axios.post('http://10.20.35.85:3000/history/getHistories',
         {
           data:filters
         });
       const [items,totalCount]=response.data
+      
       dispatch(fetchHistorySuccess(items,totalCount))      
     } catch (error) {
       dispatch(fetchHistoryError(error))

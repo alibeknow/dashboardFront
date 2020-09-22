@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+
+import {connect} from 'react-redux'
+import {fetchHistory,changePageSize} from '../../actions/history'
+import {
+  PagingState,
+  SortingState,
+  FilteringState,
+  IntegratedFiltering,
+  CustomPaging,
+
+} from '@devexpress/dx-react-grid';
+
+import { Page } from 'components';
+import {
+  Header
+} from './components';
+
 import Paper from '@material-ui/core/Paper';
-import { FilteringState } from '@devexpress/dx-react-grid';
 import {
   Grid,
+  Table,
   VirtualTable,
-  TableHeaderRow,
   TableFilterRow,
   TableHeaderRow,
 
@@ -12,64 +28,96 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 
 
-const URL = 'http://localhost:3444/monster';
 
-export default () => {
-  const [columns] = useState([
-    { name: 'id', title: 'Country' },
-    { name: 'name', title: 'City' },
-    { name: 'gender', title: 'Address' },
-  ]);
-  const [rows, setRows] = useState([]);
-  const [filters, setFilters] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [lastQuery, setLastQuery] = useState();
-
-  const getQueryString = () => {
-    let filter = filters.reduce((acc, { columnName, value }) => {
-      acc.push(`["${columnName}", "contains", "${encodeURIComponent(value)}"]`);
-      return acc;
-    }, []).join(',"and",');
-
-    if (filters.length > 1) {
-      filter = `[${filter}]`;
-    }
-
-    return `${URL}?filter=${filter}`;
-  };
-
-  const loadData = () => {
-    const queryString = getQueryString();
-    if (queryString !== lastQuery && !loading) {
-      setLoading(true);
-      fetch(queryString)
-        .then(response => response.json())
-        .then((orders) => {
-          setRows(orders);
-          setLoading(false);
-          setLastQuery(queryString);
-        })
-        .catch(() => setLoading(false));
-      setLastQuery(queryString);
-    }
-  };
-
-  useEffect(() => loadData());
-
-  return (
-    <Paper style={{ position: 'relative' }}>
-      <Grid
-        columns={columns}
-        rows={rows}
+class HistoryTable extends React.Component
+{
+  
+  componentDidMount(){
+    console.log('props-==============',this.props.onFiltersChange)
+    this.props.fetchHistory()
+  }
+  render()
+  {
+    return (
+      <Page
+        
+        title="Default Dashboard"
       >
-        <FilteringState
-          onFiltersChange={setFilters}
-        />
-        <VirtualTable />
-        <TableHeaderRow />
-        <TableFilterRow />
-      </Grid>
+        <Header />
+        <Paper>
+          <Grid
+            columns={[
+              { name: 'address', title: 'Номер абонента' },
+              { name: 'routeType', title: 'Тип маршрута' },
+              { name: 'message', title: 'Сообщение' },
+              { name: 'status', title: 'Статус' },
+              { name: 'channel', title: 'Канал' },
+              { name: 'created', title: 'Дата создания' },
+              { name: 'sended', title: 'Дата отправки' },
+              { name: 'delivered', title: 'Дата доставки' }
+            ]}
+            rows={this.props.rows}
+          >
+            <PagingState
+              currentPage={this.props.currentPage}
+              onCurrentPageChange={this.props.currentPage}
+              onPageSizeChange={this.props.changePageSize}
+              pageSize={this.props.pageSize}
+            />
+            <FilteringState
 
-    </Paper>
-  );
-};
+              onFiltersChange={this.props.onFiltersChange}
+            />
+            <IntegratedFiltering/>
+            <SortingState
+              defaultSorting={[
+                { columnName: 'address', direction: 'asc' },
+                { columnName: 'message', direction: 'asc' },
+              ]}
+            />
+
+        
+        
+    
+            <CustomPaging
+              totalCount={this.props.totalCount}
+            />
+            <VirtualTable />
+            <TableHeaderRow showSortingControls />
+            <TableFilterRow />
+            <PagingPanel
+              pageSizes={this.props.pageSizes}
+            />
+          </Grid>
+          
+        </Paper>
+      </Page>
+    );
+  }
+
+
+}
+
+function mapStateToProps(state) {
+
+  return {
+    rows: state.history.rows,
+    filters:state.history.filters,
+    totalCount:state.history.totalCount, 
+    pageSize:state.history.pageSize,
+    pageSizes: state.history.pageSizes,
+    currentPage:state.history.currentPage,
+    lastQuery:state.history.lastQuery,
+    loading: state.history.loading
+    
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchHistory: () => dispatch(fetchHistory()),
+    onFiltersChange: filters => dispatch(fetchHistory(filters)),
+    changePageSize: () => dispatch(changePageSize({pageSize:this.props.pageSize,currentPage:this.props.currentPage}))
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(HistoryTable);
