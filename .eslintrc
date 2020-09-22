@@ -15,7 +15,7 @@
               2,
               "single"
             ],
-              "react/display-name": 1,
+
                 "react/forbid-prop-types": 0,
                   "react/sort-prop-types": 1,
                     "react/jsx-boolean-value": 1,
