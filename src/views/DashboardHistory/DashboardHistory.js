@@ -6,6 +6,9 @@ import {
   VirtualTable,
   TableHeaderRow,
   TableFilterRow,
+  TableHeaderRow,
+
+  PagingPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
 
