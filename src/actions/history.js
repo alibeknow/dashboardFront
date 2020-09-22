@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { FETCH_HISTORY_ERROR, FETCH_HISTORY_START, FETCH_HISTORY_SUCCESS } from './actionTypes';
 export function fetchHistory(filters){
-  console.log(filters)
+  console.log('fiters',filters)
   return async dispatch=>{
     dispatch(fetchHistoryStart)  
     try {

@@ -6,7 +6,7 @@ import {
   PagingState,
   SortingState,
   FilteringState,
-
+  IntegratedFiltering,
   CustomPaging,
 
 } from '@devexpress/dx-react-grid';
@@ -34,7 +34,6 @@ class HistoryTable extends React.Component
   
   componentDidMount(){
     this.props.fetchHistory()
-    
   }
   render()
   {
@@ -58,10 +57,17 @@ class HistoryTable extends React.Component
             ]}
             rows={this.props.rows}
           >
-            <FilteringState
-              
-              onFiltersChange={this.state.history.filters}
+            <PagingState
+              currentPage={this.props.currentPage}
+              onCurrentPageChange={this.props.currentPage}
+              onPageSizeChange={this.props.changePageSize}
+              pageSize={this.props.pageSize}
             />
+            <FilteringState
+              filters={this.props.filters}
+              onFiltersChange={this.props.fetchHistory}
+            />
+            <IntegratedFiltering/>
             <SortingState
               defaultSorting={[
                 { columnName: 'address', direction: 'asc' },
@@ -71,12 +77,7 @@ class HistoryTable extends React.Component
 
         
         
-            <PagingState
-              currentPage={this.props.currentPage}
-              onCurrentPageChange={this.props.currentPage}
-              onPageSizeChange={this.props.changePageSize}
-              pageSize={this.props.pageSize}
-            />
+    
             <CustomPaging
               totalCount={this.props.totalCount}
             />
@@ -107,7 +108,6 @@ function mapStateToProps(state) {
     currentPage:state.history.currentPage,
     lastQuery:state.history.lastQuery,
     loading: state.history.loading
-    
   }
 }
 
